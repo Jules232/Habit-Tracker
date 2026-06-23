@@ -32,11 +32,27 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        /* Scrollbar personnalisée */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
         body {
             background-color: var(--bg-color);
             color: var(--text-main);
             line-height: 1.5;
-            padding-bottom: 80px;
+            padding-bottom: 100px;
             overflow-x: hidden;
             transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s ease;
         }
@@ -194,6 +210,7 @@
             font-size: clamp(28px, 8vw, 36px);
             font-weight: 900;
             text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            transition: color 0.3s ease;
         }
 
         .progress-text .label {
@@ -231,7 +248,7 @@
             flex-direction: column;
             justify-content: center;
             border: 1px solid var(--border);
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, border-color 0.3s ease;
         }
 
         .stat-card:hover {
@@ -287,6 +304,17 @@
             border: 1px solid var(--border);
             animation: slideInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
+        
+        /* État "Complété" pour une meilleure UX */
+        .habit-card.completed {
+            background: rgba(30, 41, 59, 0.4);
+            border-color: rgba(34, 197, 94, 0.2);
+            opacity: 0.85;
+        }
+        .habit-card.completed .habit-name {
+            text-decoration: line-through;
+            color: var(--text-muted);
+        }
 
         @media (hover: hover) {
             .habit-card:hover {
@@ -309,6 +337,12 @@
             justify-content: center;
             margin-right: 18px;
             box-shadow: inset 0 2px 4px rgba(255,255,255,0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .habit-card.completed .habit-icon {
+            transform: scale(0.9);
+            filter: grayscale(0.5);
         }
 
         .habit-info {
@@ -323,8 +357,11 @@
             margin-bottom: 5px;
             word-wrap: break-word;
             overflow-wrap: break-word;
+            word-break: break-word;
+            hyphens: auto;
             line-height: 1.3;
             color: var(--text-main);
+            transition: color 0.3s ease;
         }
 
         .habit-streak {
@@ -336,34 +373,34 @@
             font-weight: 500;
         }
 
-        /* Custom Animated Checkbox - CORRIGÉ POUR LE CLIC */
+        /* Custom Animated Checkbox - Hitbox ergonomique */
         .checkbox-wrapper {
             position: relative;
-            width: 34px;
-            height: 34px;
+            width: 38px;
+            height: 38px;
             cursor: pointer;
             flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            -webkit-tap-highlight-color: rgba(59, 130, 246, 0.2);
         }
 
         .checkbox-wrapper input {
             position: absolute;
             opacity: 0;
             cursor: pointer;
-            /* La zone de clic prend maintenant 100% de la surface pour faciliter l'appui */
             height: 100%;
             width: 100%;
-            top: 0;
-            left: 0;
-            z-index: 5;
             margin: 0;
+            z-index: 2;
         }
 
         .checkmark {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 34px;
-            width: 34px;
+            position: relative;
+            height: 30px;
+            width: 30px;
             background-color: var(--bg-color);
             border: 2px solid var(--border);
             border-radius: 50%;
@@ -372,9 +409,10 @@
             align-items: center;
             justify-content: center;
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+            pointer-events: none;
         }
 
-        .checkbox-wrapper:hover input ~ .checkmark {
+        .checkbox-wrapper:hover .checkmark {
             border-color: var(--primary);
             box-shadow: 0 0 10px rgba(59, 130, 246, 0.3), inset 0 2px 4px rgba(0,0,0,0.2);
         }
@@ -387,8 +425,8 @@
         }
 
         .checkmark svg {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
             stroke: white;
             stroke-width: 3.5;
             stroke-dasharray: 24;
@@ -411,13 +449,14 @@
 
         .habit-actions {
             position: absolute;
-            right: -100px;
+            right: -120px;
             top: 0;
             bottom: 0;
             display: flex;
             align-items: center;
-            background: rgba(var(--bg-card), 0.95);
+            background: rgba(30, 41, 59, 0.95);
             backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             padding: 0 15px;
             transition: right 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             border-top-right-radius: var(--radius);
@@ -440,6 +479,7 @@
             margin-left: 5px;
             flex-shrink: 0;
             transition: color 0.2s;
+            height: 100%;
         }
         
         .more-options-btn:hover { color: var(--text-main); }
@@ -464,7 +504,7 @@
             .action-btn.delete:hover { color: var(--danger); border-color: var(--danger); transform: translateY(-2px); }
         }
 
-        /* FAB (Floating Action Button) - CORRIGÉ POUR LE CENTRAGE */
+        /* FAB (Floating Action Button) */
         .fab {
             position: fixed;
             bottom: 30px;
@@ -478,7 +518,6 @@
             border-radius: 50%;
             box-shadow: 0 10px 25px rgba(59, 130, 246, 0.5), 0 0 0 4px rgba(59, 130, 246, 0.1);
             cursor: pointer;
-            /* Utilisation de Flexbox pour un centrage parfait de l'icône SVG à l'intérieur */
             display: flex;
             align-items: center;
             justify-content: center;
@@ -506,7 +545,7 @@
         .achievements-grid::-webkit-scrollbar { display: none; } 
 
         .badge-card {
-            min-width: 100px;
+            min-width: 105px;
             flex: 0 0 auto;
             background: var(--bg-card);
             padding: 18px 12px;
@@ -545,8 +584,8 @@
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -573,7 +612,7 @@
             transform: translateY(30px) scale(0.95);
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .modal-overlay.active .modal {
@@ -651,7 +690,7 @@
         }
 
         .icon-option.selected {
-            background: rgba(var(--primary), 0.1);
+            background: rgba(59, 130, 246, 0.15);
             border-color: var(--primary);
             transform: scale(1.15);
             box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
@@ -735,19 +774,23 @@
             text-align: center;
             padding: 50px 20px;
             color: var(--text-muted);
-            background: var(--bg-card);
+            background: rgba(30, 41, 59, 0.5);
             border-radius: var(--radius);
             border: 2px dashed var(--border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .empty-state svg {
             width: 72px; height: 72px;
             margin-bottom: 20px;
-            opacity: 0.4;
+            opacity: 0.6;
             color: var(--primary);
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
         }
         .empty-state p { font-size: 16px; font-weight: 500; }
 
-        /* THEMES - Enrichis */
+        /* THEMES */
         body.theme-light {
             --bg-color: #f1f5f9;
             --bg-card: #ffffff;
@@ -785,7 +828,6 @@
             --gradient-2: #f97316;
             --glow: 0 0 15px rgba(244, 63, 94, 0.3);
         }
-        /* Nouveau Thème : Océan */
         body.theme-ocean {
             --bg-color: #083344;
             --bg-card: #164e63;
@@ -799,7 +841,6 @@
             --gradient-2: #3b82f6;
             --glow: 0 0 15px rgba(6, 182, 212, 0.3);
         }
-        /* Nouveau Thème : Cyberpunk */
         body.theme-cyberpunk {
             --bg-color: #09090b;
             --bg-card: #18181b;
@@ -945,7 +986,7 @@
 
     </div>
 
-    <!-- Floating Action Button (FAB) - Parfaitement centré avec une icône SVG -->
+    <!-- Floating Action Button (FAB) -->
     <button class="fab" id="btn-add-habit" aria-label="Ajouter une habitude">
         <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
@@ -985,7 +1026,7 @@
             <div class="form-group">
                 <label for="reminder-time">Heure de notification quotidienne</label>
                 <input type="time" id="reminder-time" class="form-control">
-                <p style="font-size: 13px; color: var(--text-muted); margin-top: 8px; line-height: 1.5;">Activez les notifications de votre navigateur pour recevoir les rappels (nécessite que le site reste ouvert).</p>
+                <p style="font-size: 13px; color: var(--text-muted); margin-top: 8px; line-height: 1.5;">Activez les notifications de votre navigateur pour recevoir les rappels (nécessite que le site reste ouvert en onglet).</p>
             </div>
 
             <div class="form-group">
@@ -994,9 +1035,9 @@
                     <option value="default">Nuit Profonde (Défaut)</option>
                     <option value="light">Clair & Épuré</option>
                     <option value="nature">Forêt Paisible</option>
-                    <option value="ocean">Océan Profond (Nouveau)</option>
+                    <option value="ocean">Océan Profond</option>
                     <option value="sunset">Coucher de Soleil</option>
-                    <option value="cyberpunk">Cyberpunk Néon (Nouveau)</option>
+                    <option value="cyberpunk">Cyberpunk Néon</option>
                 </select>
             </div>
 
@@ -1033,7 +1074,6 @@
  */
 
 // --- CONFIG & STATE ---
-// Plus d'icônes ajoutées pour la personnalisation
 const ICONS = ['💧', '🏃', '📚', '🧘', '🥦', '🛌', '💻', '🎸', '🎨', '🧹', '💊', '🌞', '☕', '✍️', '💸', '🐶', '🏋️‍♂️', '🧠'];
 const BADGES_CONFIG = [
     { id: 'first', name: 'Premier Pas', desc: 'Compléter une habitude', icon: '🌟', condition: (stats) => stats.total > 0 },
@@ -1048,7 +1088,7 @@ const BADGES_CONFIG = [
 const QUOTES = [
     "Le secret de votre futur est caché dans votre routine quotidienne.",
     "La motivation vous sert de départ. L'habitude vous fait continuer.",
-    "On ne change pas sa vie en un jour, mais en changeant ses habitudes.",
+    "On ne change pas sa vie en un jour, mais en changing ses habitudes.",
     "Les petites disciplines répétées avec constance mènent aux grandes réalisations.",
     "L'excellence n'est pas une action, mais une habitude.",
     "Chaque jour est une nouvelle chance de devenir la meilleure version de vous-même.",
@@ -1070,12 +1110,15 @@ let state = {
 };
 
 let currentDate = new Date(); 
-const todayString = formatDate(new Date());
 let audioCtx = null; 
 
 // --- UTILITIES ---
 function generateId() {
     return Math.random().toString(36).substr(2, 9);
+}
+
+function getTodayString() {
+    return formatDate(new Date());
 }
 
 function formatDate(date) {
@@ -1085,7 +1128,7 @@ function formatDate(date) {
 }
 
 function getDayName(dateString) {
-    if (dateString === todayString) return "Aujourd'hui";
+    if (dateString === getTodayString()) return "Aujourd'hui";
     const yesterday = new Date(); 
     yesterday.setDate(yesterday.getDate() - 1);
     if (dateString === formatDate(yesterday)) return "Hier";
@@ -1101,8 +1144,6 @@ function getMonthName(date) {
 function getProgressColor(percent) {
     if (percent === 0) return 'var(--danger)'; 
     if (percent === 100) return 'var(--success)';
-    
-    // Smooth transition from Warning to Success
     const hue = (percent / 100) * 120;
     return `hsl(${hue}, 80%, 50%)`;
 }
@@ -1279,7 +1320,7 @@ function render() {
     const dateStr = formatDate(currentDate);
     
     document.getElementById('display-date').textContent = getDayName(dateStr);
-    document.getElementById('btn-next-day').style.visibility = (dateStr === todayString) ? 'hidden' : 'visible';
+    document.getElementById('btn-next-day').style.visibility = (dateStr === getTodayString()) ? 'hidden' : 'visible';
 
     updateDailyQuote();
 
@@ -1295,7 +1336,7 @@ function render() {
         container.innerHTML = `
             <div class="empty-state">
                 <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                <p>Aucun objectif pour ce jour. Créez-en un nouveau !</p>
+                <p>Aucun objectif pour ce jour. Créez-en un nouveau via le bouton ci-dessous !</p>
             </div>
         `;
     } else {
@@ -1313,7 +1354,8 @@ function render() {
             }
 
             const card = document.createElement('div');
-            card.className = 'habit-card';
+            card.className = `habit-card ${isChecked ? 'completed' : ''}`;
+            
             card.innerHTML = `
                 <div class="habit-icon">${habit.icon}</div>
                 <div class="habit-info">
@@ -1322,14 +1364,14 @@ function render() {
                         ${hStreak > 1 ? `🔥 ${hStreak} jours de suite` : 'Prêt à commencer'}
                     </div>
                 </div>
-                <div class="checkbox-wrapper">
+                <label class="checkbox-wrapper" title="Valider cet objectif">
                     <input type="checkbox" id="check-${habit.id}" ${isChecked ? 'checked' : ''} aria-label="Valider ${escapeHTML(habit.name)}">
                     <div class="checkmark">
                         <svg viewBox="0 0 24 24">
                             <path d="M5 13l4 4L19 7"></path>
                         </svg>
                     </div>
-                </div>
+                </label>
                 <button class="more-options-btn" onclick="toggleActions('${habit.id}')" aria-label="Options pour ${escapeHTML(habit.name)}">⋮</button>
                 <div class="habit-actions" id="actions-${habit.id}">
                     <button class="action-btn edit" onclick="editHabit('${habit.id}')" aria-label="Modifier"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
@@ -1337,7 +1379,7 @@ function render() {
                 </div>
             `;
 
-            const checkbox = card.querySelector('input');
+            const checkbox = card.querySelector('input[type="checkbox"]');
             checkbox.addEventListener('change', (e) => {
                 toggleHabit(habit.id, dateStr, e.target.checked);
             });
@@ -1391,12 +1433,13 @@ function playSuccessSound() {
         if (!AudioContext) return;
         
         if (!audioCtx) audioCtx = new AudioContext();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
         
         const osc = audioCtx.createOscillator();
         const gainNode = audioCtx.createGain();
         
-        // Son Premium, plus clair et doux
         osc.type = 'sine';
         osc.frequency.setValueAtTime(659.25, audioCtx.currentTime); // Mi
         osc.frequency.exponentialRampToValueAtTime(1046.50, audioCtx.currentTime + 0.1); // Do
@@ -1411,7 +1454,7 @@ function playSuccessSound() {
         osc.start();
         osc.stop(audioCtx.currentTime + 0.6);
     } catch(e) { 
-        console.warn('Audio non supporté sur ce navigateur'); 
+        console.warn('Audio non supporté sur ce navigateur ou bloqué par les règles de sécurité.'); 
     }
 }
 
@@ -1421,9 +1464,7 @@ function toggleHabit(habitId, dateStr, isCompleted) {
         state.records[dateStr] = {};
     }
     state.records[dateStr][habitId] = isCompleted;
-    saveData();
-    render(); 
-
+    
     if(isCompleted) {
         const checkbox = document.getElementById(`check-${habitId}`);
         if(checkbox) {
@@ -1432,6 +1473,9 @@ function toggleHabit(habitId, dateStr, isCompleted) {
         }
         playSuccessSound();
     }
+    
+    saveData();
+    render(); 
 }
 
 function toggleActions(id) {
@@ -1439,8 +1483,13 @@ function toggleActions(id) {
     allCards.forEach(c => {
         if(!c.querySelector(`#actions-${id}`)) c.classList.remove('show-actions');
     });
-    const card = document.getElementById(`actions-${id}`).closest('.habit-card');
-    card.classList.toggle('show-actions');
+    const actionEl = document.getElementById(`actions-${id}`);
+    if (actionEl) {
+        const card = actionEl.closest('.habit-card');
+        if (card) {
+            card.classList.toggle('show-actions');
+        }
+    }
 }
 
 // Fermer les actions si on clique ailleurs
@@ -1503,14 +1552,16 @@ document.getElementById('btn-save-habit').addEventListener('click', () => {
 
     if (editingHabitId) {
         const habit = state.habits.find(h => h.id === editingHabitId);
-        habit.name = name;
-        habit.icon = selectedIcon;
+        if (habit) {
+            habit.name = name;
+            habit.icon = selectedIcon;
+        }
     } else {
         state.habits.push({
             id: generateId(),
             name: name,
             icon: selectedIcon,
-            createdAt: todayString
+            createdAt: getTodayString()
         });
     }
 
@@ -1572,21 +1623,30 @@ document.getElementById('btn-save-settings').addEventListener('click', () => {
     closeSettings();
 });
 
+// Notifications fiables (Génère une icône SVG en base64 car l'API n'accepte pas directement les émojis)
+const createRocketIconUrl = () => {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="32" fill="#3b82f6"/><text x="32" y="42" font-size="30" text-anchor="middle" fill="white">🚀</text></svg>`;
+    return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
+};
+
 setInterval(() => {
     if ('Notification' in window && Notification.permission === 'granted' && state.settings.reminderTime) {
         const now = new Date();
-        const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        const currentTotalMins = now.getHours() * 60 + now.getMinutes();
+        const [remH, remM] = state.settings.reminderTime.split(':').map(Number);
+        const reminderTotalMins = remH * 60 + remM;
+        const currentTodayStr = getTodayString();
         
-        if (timeStr === state.settings.reminderTime && state.settings.lastNotificationDate !== todayString) {
-            new Notification("Habit Tracker Premium", {
+        if (currentTotalMins >= reminderTotalMins && state.settings.lastNotificationDate !== currentTodayStr) {
+            new Notification("Habit Tracker Premium 🚀", {
                 body: "C'est l'heure de compléter vos objectifs du jour !",
-                icon: "🚀"
+                icon: createRocketIconUrl()
             });
-            state.settings.lastNotificationDate = todayString;
+            state.settings.lastNotificationDate = currentTodayStr;
             saveData();
         }
     }
-}, 60000);
+}, 30000); 
 
 // --- ACHIEVEMENTS SYSTEM ---
 function checkAchievements(stats) {
@@ -1620,7 +1680,7 @@ document.getElementById('btn-prev-day').addEventListener('click', () => {
 document.getElementById('btn-next-day').addEventListener('click', () => {
     const tmrw = new Date(currentDate);
     tmrw.setDate(tmrw.getDate() + 1);
-    if(formatDate(tmrw) <= todayString) {
+    if(formatDate(tmrw) <= getTodayString()) {
         currentDate = tmrw;
         render();
     }
@@ -1661,6 +1721,7 @@ function fireConfetti(x, y, count) {
     }
 }
 
+// Correction du bug d'index de tableau lors de la suppression de particules
 function animateConfetti() {
     if(particles.length === 0) {
         isAnimatingConfetti = false;
@@ -1671,11 +1732,13 @@ function animateConfetti() {
     requestAnimationFrame(animateConfetti);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    particles.forEach((p, index) => {
+    // Parcourt le tableau à l'envers pour sécuriser les opérations de splice
+    for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
         p.tiltAngle += p.tiltAngleInc;
         p.y += (Math.cos(p.tiltAngle) + 1 + p.r / 2) / 2;
         p.x += Math.sin(p.tiltAngle) * 2.5;
-        p.dy += 0.22; // Gravity
+        p.dy += 0.22; // Gravité
         p.y += p.dy;
         p.x += p.dx;
 
@@ -1687,9 +1750,9 @@ function animateConfetti() {
         ctx.stroke();
 
         if (p.y > canvas.height) {
-            particles.splice(index, 1);
+            particles.splice(i, 1);
         }
-    });
+    }
 }
 
 function escapeHTML(str) {
@@ -1722,6 +1785,13 @@ window.addEventListener('click', (e) => {
         closeSettings();
     }
 });
+
+// Écouteur global pour déverrouiller l'AudioContext en cas de restriction de navigateur
+window.addEventListener('click', () => {
+    if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+}, { once: true });
 
 init();
 
