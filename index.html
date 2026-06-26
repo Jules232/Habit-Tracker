@@ -62,7 +62,7 @@
             width: 100%;
             max-width: 600px;
             margin: 0 auto;
-            padding: 25px 20px;
+            padding: clamp(15px, 4vw, 25px) clamp(15px, 4vw, 20px);
         }
 
         /* Header */
@@ -240,7 +240,7 @@
 
         .stat-card {
             background: var(--bg-card);
-            padding: 18px 10px;
+            padding: clamp(12px, 3vw, 18px) 10px;
             border-radius: var(--radius);
             text-align: center;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -262,7 +262,8 @@
             font-weight: 800;
             color: var(--text-main);
             margin-bottom: 5px;
-            word-break: break-all;
+            overflow-wrap: break-word;
+            word-break: break-word;
         }
 
         .stat-card .lbl {
@@ -294,7 +295,7 @@
         .habit-card {
             background: var(--bg-card);
             border-radius: var(--radius);
-            padding: 18px;
+            padding: clamp(14px, 4vw, 18px);
             display: flex;
             align-items: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
@@ -305,7 +306,6 @@
             animation: slideInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
         
-        /* État "Complété" pour une meilleure UX */
         .habit-card.completed {
             background: rgba(30, 41, 59, 0.4);
             border-color: rgba(34, 197, 94, 0.2);
@@ -326,16 +326,16 @@
         }
 
         .habit-icon {
-            font-size: 26px;
-            width: 52px;
-            height: 52px;
+            font-size: clamp(22px, 6vw, 26px);
+            width: clamp(44px, 12vw, 52px);
+            height: clamp(44px, 12vw, 52px);
             flex-shrink: 0;
             border-radius: 14px;
             background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.02));
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-right: 18px;
+            margin-right: clamp(12px, 3vw, 18px);
             box-shadow: inset 0 2px 4px rgba(255,255,255,0.05);
             transition: transform 0.3s ease;
         }
@@ -352,7 +352,7 @@
         }
 
         .habit-name {
-            font-size: 17px;
+            font-size: clamp(15px, 4vw, 17px);
             font-weight: 700;
             margin-bottom: 5px;
             word-wrap: break-word;
@@ -365,15 +365,16 @@
         }
 
         .habit-streak {
-            font-size: 13px;
+            font-size: clamp(12px, 3vw, 13px);
             color: var(--warning);
             display: flex;
             align-items: center;
             gap: 5px;
             font-weight: 500;
+            line-height: 1.3;
         }
 
-        /* Custom Animated Checkbox - Hitbox ergonomique */
+        /* Custom Animated Checkbox */
         .checkbox-wrapper {
             position: relative;
             width: 38px;
@@ -579,7 +580,7 @@
             color: var(--text-main);
         }
 
-        /* Modals (Glassmorphism + Styling) */
+        /* Modals */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
@@ -593,7 +594,7 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.3s ease;
-            padding: 20px;
+            padding: 15px;
         }
 
         .modal-overlay.active {
@@ -608,7 +609,7 @@
             max-height: 90vh;
             overflow-y: auto;
             border-radius: 24px;
-            padding: 30px;
+            padding: clamp(20px, 5vw, 30px);
             transform: translateY(30px) scale(0.95);
             transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6);
@@ -661,7 +662,7 @@
 
         .icon-selector {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
             gap: 12px;
             margin-top: 12px;
             background: var(--bg-color);
@@ -1041,11 +1042,42 @@
                 </select>
             </div>
 
-            <div class="form-group" style="margin-top: 25px;">
+            <div class="form-group" style="margin-top: 20px;">
                 <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; color: var(--text-main); font-size: 16px;">
                     <input type="checkbox" id="sound-toggle" style="width: 20px; height: 20px; accent-color: var(--primary); cursor: pointer;">
                     Activer les effets sonores
                 </label>
+            </div>
+
+            <!-- NOUVEAU: Mode Sport Spécial -->
+            <div class="form-group" style="margin-top: 25px; background: rgba(59, 130, 246, 0.08); padding: 18px; border-radius: 12px; border: 1px solid var(--primary);">
+                <label style="display: flex; align-items: center; gap: 12px; cursor: pointer; color: var(--text-main); font-size: 16px; font-weight: 700;">
+                    <input type="checkbox" id="sport-mode-toggle" style="width: 20px; height: 20px; accent-color: var(--primary); cursor: pointer;">
+                    🏋️‍♂️ Activer le Mode Sport Spécial
+                </label>
+                <div id="sport-progressive-container" style="margin-top: 15px; padding-left: 32px; display: none;">
+                    <label style="display: flex; align-items: flex-start; gap: 12px; cursor: pointer; color: var(--text-muted); font-size: 14px; font-weight: 500; line-height: 1.4; margin-bottom: 12px;">
+                        <input type="checkbox" id="sport-progressive-toggle" style="width: 18px; height: 18px; accent-color: var(--warning); cursor: pointer; margin-top: 2px;">
+                        <span>Activer le Défi Progressif<br><small style="opacity:0.8;">Évolue selon tes réussites ou tes échecs.</small></span>
+                    </label>
+                    <div id="sport-params-container" style="display: none; background: rgba(0,0,0,0.15); padding: 12px; border-radius: 8px; border: 1px solid var(--border);">
+                        <div style="margin-bottom: 12px;">
+                            <label for="sport-exercise" style="font-size: 13px; display: block; margin-bottom: 4px;">Exercice (ex: pompes, abdos)</label>
+                            <input type="text" id="sport-exercise" class="form-control" style="padding: 8px; font-size: 14px;" value="pompes">
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <label for="sport-start" style="font-size: 13px; display: block; margin-bottom: 4px;">Départ : <span id="sport-start-val" style="font-weight: 800; color: var(--primary);">10</span></label>
+                            <input type="range" id="sport-start" min="1" max="100" value="10" style="width: 100%; accent-color: var(--primary);">
+                        </div>
+                        <div>
+                            <label for="sport-difficulty" style="font-size: 13px; display: block; margin-bottom: 4px;">Difficulté</label>
+                            <select id="sport-difficulty" class="form-control" style="padding: 8px; font-size: 14px; cursor: pointer;">
+                                <option value="normal">Normal (+1 réussite / +5 raté)</option>
+                                <option value="hardcore">Hardcore (+5 réussite / +15 raté)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="btn-row">
@@ -1069,8 +1101,6 @@
 <script>
 /**
  * HABIT TRACKER APP LOGIC
- * Architecture optimisée : Pure Vanilla JS, localStorage uniquement.
- * Sécurité, performances, et design premium améliorés.
  */
 
 // --- CONFIG & STATE ---
@@ -1088,7 +1118,7 @@ const BADGES_CONFIG = [
 const QUOTES = [
     "Le secret de votre futur est caché dans votre routine quotidienne.",
     "La motivation vous sert de départ. L'habitude vous fait continuer.",
-    "On ne change pas sa vie en un jour, mais en changing ses habitudes.",
+    "On ne change pas sa vie en un jour, mais en changeant ses habitudes.",
     "Les petites disciplines répétées avec constance mènent aux grandes réalisations.",
     "L'excellence n'est pas une action, mais une habitude.",
     "Chaque jour est une nouvelle chance de devenir la meilleure version de vous-même.",
@@ -1105,7 +1135,12 @@ let state = {
         reminderTime: '20:00',
         lastNotificationDate: null,
         theme: 'default',
-        soundEnabled: true
+        soundEnabled: true,
+        sportModeEnabled: false,
+        sportProgressiveMode: false,
+        sportExercise: 'pompes',
+        sportStart: 10,
+        sportDifficulty: 'normal'
     }
 };
 
@@ -1155,9 +1190,16 @@ function loadData() {
         if (saved) {
             const parsed = JSON.parse(saved);
             state = { ...state, ...parsed };
-            if(!state.settings) state.settings = { reminderTime: '20:00', lastNotificationDate: null };
+            // Retro-compatibilité sécurisée
+            if(!state.settings) state.settings = {};
+            if(state.settings.reminderTime === undefined) state.settings.reminderTime = '20:00';
             if(state.settings.theme === undefined) state.settings.theme = 'default';
             if(state.settings.soundEnabled === undefined) state.settings.soundEnabled = true;
+            if(state.settings.sportModeEnabled === undefined) state.settings.sportModeEnabled = false;
+            if(state.settings.sportProgressiveMode === undefined) state.settings.sportProgressiveMode = false;
+            if(state.settings.sportExercise === undefined) state.settings.sportExercise = 'pompes';
+            if(state.settings.sportStart === undefined) state.settings.sportStart = 10;
+            if(state.settings.sportDifficulty === undefined) state.settings.sportDifficulty = 'normal';
         }
     } catch(e) {
         console.error("Erreur de chargement des données", e);
@@ -1166,9 +1208,46 @@ function loadData() {
 }
 
 function saveData() {
-    localStorage.setItem('habitTrackerData', JSON.stringify(state));
-    calculateStats();
+    try {
+        localStorage.setItem('habitTrackerData', JSON.stringify(state));
+        calculateStats();
+    } catch (e) {
+        console.error("Erreur de sauvegarde des données (stockage plein ou restreint)", e);
+    }
 }
+
+// --- LOGIQUE DÉFI SPORT PROGRESSIF ---
+function calculateSportTarget(targetDateStr) {
+    const sportHabit = state.habits.find(h => h.id === 'special-sport');
+    if (!sportHabit) return parseInt(state.settings.sportStart) || 10;
+    
+    let target = parseInt(state.settings.sportStart) || 10; 
+    const isHardcore = state.settings.sportDifficulty === 'hardcore';
+    const increment = isHardcore ? 5 : 1;
+    const penalty = isHardcore ? 15 : 5;
+    
+    let d = new Date(sportHabit.createdAt);
+    let checkDateStr = formatDate(d);
+    const todayStr = getTodayString();
+    
+    // On boucle de la date de création jusqu'à la date affichée (non-incluse)
+    while (checkDateStr < targetDateStr) {
+        const isCompleted = state.records[checkDateStr] && state.records[checkDateStr]['special-sport'];
+        
+        if (isCompleted) {
+            target += increment; // Fait
+        } else if (checkDateStr < todayStr) {
+            // Le jour a été raté (car strictement dans le passé)
+            target += penalty; // Raté
+        }
+        
+        d.setDate(d.getDate() + 1);
+        checkDateStr = formatDate(d);
+    }
+    
+    return target;
+}
+
 
 // --- STATS & LOGIC ---
 function calculateStats() {
@@ -1343,25 +1422,53 @@ function render() {
         activeHabits.forEach(habit => {
             const isChecked = records[habit.id] === true;
             if (isChecked) completedCount++;
+            
+            const isSpecialSport = (habit.id === 'special-sport');
 
-            let hStreak = 0;
-            let d = new Date(currentDate);
-            let checkStr = formatDate(d);
-            while((state.records[checkStr] && state.records[checkStr][habit.id]) && checkStr >= habit.createdAt) {
-                hStreak++;
-                d.setDate(d.getDate() - 1);
-                checkStr = formatDate(d);
+            let displayName = escapeHTML(habit.name);
+            let displayDesc = '';
+            let descStyle = '';
+
+            // Configuration spécifique pour l'objectif Sport
+            if (isSpecialSport) {
+                if (state.settings.sportProgressiveMode) {
+                    const targetPompes = calculateSportTarget(dateStr);
+                    const exerciseName = escapeHTML(state.settings.sportExercise || 'pompes');
+                    displayName = 'Défi Progressif';
+                    displayDesc = `🔥 Objectif : ${targetPompes} ${exerciseName} à faire !`;
+                    descStyle = 'color: var(--primary); font-weight: 700;';
+                } else {
+                    displayName = 'Séance de Sport';
+                    displayDesc = 'Objectif libre (Cliquez pour valider)';
+                }
+            } else {
+                // Habitude standard : calcul de la série
+                let hStreak = 0;
+                let d = new Date(currentDate);
+                let checkStr = formatDate(d);
+                while((state.records[checkStr] && state.records[checkStr][habit.id]) && checkStr >= habit.createdAt) {
+                    hStreak++;
+                    d.setDate(d.getDate() - 1);
+                    checkStr = formatDate(d);
+                }
+                displayDesc = hStreak > 1 ? `🔥 ${hStreak} jours de suite` : 'Prêt à commencer';
             }
 
             const card = document.createElement('div');
             card.className = `habit-card ${isChecked ? 'completed' : ''}`;
             
+            // On cache les actions "éditer/supprimer" pour l'objectif spécial pour éviter de le casser
+            const actionsHtml = isSpecialSport 
+                ? `<div style="padding:0 15px;color:var(--text-muted);font-size:12px;text-align:center;line-height:1.2;">Géré dans les paramètres ⚙️</div>`
+                : `<button class="action-btn edit" onclick="editHabit('${habit.id}')" aria-label="Modifier"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
+                   <button class="action-btn delete" onclick="deleteHabit('${habit.id}')" aria-label="Supprimer"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>`;
+
             card.innerHTML = `
                 <div class="habit-icon">${habit.icon}</div>
                 <div class="habit-info">
-                    <div class="habit-name">${escapeHTML(habit.name)}</div>
-                    <div class="habit-streak">
-                        ${hStreak > 1 ? `🔥 ${hStreak} jours de suite` : 'Prêt à commencer'}
+                    <div class="habit-name">${displayName}</div>
+                    <div class="habit-streak" style="${descStyle}">
+                        ${displayDesc}
                     </div>
                 </div>
                 <label class="checkbox-wrapper" title="Valider cet objectif">
@@ -1372,10 +1479,9 @@ function render() {
                         </svg>
                     </div>
                 </label>
-                <button class="more-options-btn" onclick="toggleActions('${habit.id}')" aria-label="Options pour ${escapeHTML(habit.name)}">⋮</button>
+                <button class="more-options-btn" onclick="toggleActions('${habit.id}')" aria-label="Options">⋮</button>
                 <div class="habit-actions" id="actions-${habit.id}">
-                    <button class="action-btn edit" onclick="editHabit('${habit.id}')" aria-label="Modifier"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg></button>
-                    <button class="action-btn delete" onclick="deleteHabit('${habit.id}')" aria-label="Supprimer"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button>
+                    ${actionsHtml}
                 </div>
             `;
 
@@ -1426,16 +1532,23 @@ function updateDailyQuote() {
     if(quoteEl) quoteEl.textContent = `"${quoteText}"`;
 }
 
+function initAudioContext() {
+    if (!audioCtx) {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (AudioContext) {
+            audioCtx = new AudioContext();
+        }
+    }
+    if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+}
+
 function playSuccessSound() {
     if (!state.settings.soundEnabled) return;
     try {
-        const AudioContext = window.AudioContext || window.webkitAudioContext;
-        if (!AudioContext) return;
-        
-        if (!audioCtx) audioCtx = new AudioContext();
-        if (audioCtx.state === 'suspended') {
-            audioCtx.resume();
-        }
+        initAudioContext();
+        if (!audioCtx) return;
         
         const osc = audioCtx.createOscillator();
         const gainNode = audioCtx.createGain();
@@ -1492,7 +1605,6 @@ function toggleActions(id) {
     }
 }
 
-// Fermer les actions si on clique ailleurs
 window.addEventListener('click', (e) => {
     if(!e.target.closest('.habit-card')) {
         document.querySelectorAll('.habit-card.show-actions').forEach(c => c.classList.remove('show-actions'));
@@ -1586,10 +1698,25 @@ function deleteHabit(id) {
 }
 
 // --- SETTINGS & NOTIFICATIONS ---
+
+// Logique UI des paramètres Sport
+document.getElementById('sport-mode-toggle').addEventListener('change', (e) => {
+    document.getElementById('sport-progressive-container').style.display = e.target.checked ? 'block' : 'none';
+});
+
+document.getElementById('sport-progressive-toggle').addEventListener('change', (e) => {
+    document.getElementById('sport-params-container').style.display = e.target.checked ? 'block' : 'none';
+});
+
+document.getElementById('sport-start').addEventListener('input', (e) => {
+    document.getElementById('sport-start-val').textContent = e.target.value;
+});
+
 function requestNotificationSafe() {
     if ('Notification' in window) {
         if (Notification.permission !== "granted" && Notification.permission !== "denied") {
-            Notification.requestPermission();
+            const promise = Notification.requestPermission();
+            if (promise) promise.catch(e => console.warn("Notifications ignorées ou bloquées", e));
         }
     }
 }
@@ -1598,6 +1725,18 @@ function openSettings() {
     document.getElementById('reminder-time').value = state.settings.reminderTime;
     document.getElementById('theme-select').value = state.settings.theme || 'default';
     document.getElementById('sound-toggle').checked = state.settings.soundEnabled !== false;
+    
+    // Remplissage Mode Sport
+    document.getElementById('sport-mode-toggle').checked = !!state.settings.sportModeEnabled;
+    document.getElementById('sport-progressive-toggle').checked = !!state.settings.sportProgressiveMode;
+    document.getElementById('sport-progressive-container').style.display = state.settings.sportModeEnabled ? 'block' : 'none';
+    
+    document.getElementById('sport-exercise').value = state.settings.sportExercise || 'pompes';
+    document.getElementById('sport-start').value = state.settings.sportStart || 10;
+    document.getElementById('sport-start-val').textContent = state.settings.sportStart || 10;
+    document.getElementById('sport-difficulty').value = state.settings.sportDifficulty || 'normal';
+    document.getElementById('sport-params-container').style.display = state.settings.sportProgressiveMode ? 'block' : 'none';
+
     document.getElementById('settings-modal').classList.add('active');
     requestNotificationSafe();
 }
@@ -1614,16 +1753,33 @@ document.getElementById('btn-save-settings').addEventListener('click', () => {
     state.settings.theme = document.getElementById('theme-select').value;
     state.settings.soundEnabled = document.getElementById('sound-toggle').checked;
     
-    applyTheme(state.settings.theme);
-    
-    if ('Notification' in window && Notification.permission === "default") {
-        Notification.requestPermission();
+    // Sauvegarde Mode Sport
+    state.settings.sportModeEnabled = document.getElementById('sport-mode-toggle').checked;
+    state.settings.sportProgressiveMode = document.getElementById('sport-progressive-toggle').checked;
+    state.settings.sportExercise = document.getElementById('sport-exercise').value.trim() || 'pompes';
+    state.settings.sportStart = parseInt(document.getElementById('sport-start').value, 10) || 10;
+    state.settings.sportDifficulty = document.getElementById('sport-difficulty').value;
+
+    // Ajout/Retrait automatique de l'objectif Sport
+    if (state.settings.sportModeEnabled && !state.habits.find(h => h.id === 'special-sport')) {
+        state.habits.push({
+            id: 'special-sport',
+            name: 'Défi Sport',
+            icon: '🏋️‍♂️',
+            createdAt: getTodayString()
+        });
+    } else if (!state.settings.sportModeEnabled) {
+        state.habits = state.habits.filter(h => h.id !== 'special-sport');
     }
+    
+    applyTheme(state.settings.theme);
+    requestNotificationSafe();
+    
     saveData();
     closeSettings();
+    render(); // Forcer la re-génération pour afficher/masquer le mode Sport
 });
 
-// Notifications fiables (Génère une icône SVG en base64 car l'API n'accepte pas directement les émojis)
 const createRocketIconUrl = () => {
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="32" r="32" fill="#3b82f6"/><text x="32" y="42" font-size="30" text-anchor="middle" fill="white">🚀</text></svg>`;
     return 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svg)));
@@ -1721,7 +1877,6 @@ function fireConfetti(x, y, count) {
     }
 }
 
-// Correction du bug d'index de tableau lors de la suppression de particules
 function animateConfetti() {
     if(particles.length === 0) {
         isAnimatingConfetti = false;
@@ -1732,7 +1887,6 @@ function animateConfetti() {
     requestAnimationFrame(animateConfetti);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    // Parcourt le tableau à l'envers pour sécuriser les opérations de splice
     for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
         p.tiltAngle += p.tiltAngleInc;
@@ -1774,7 +1928,7 @@ function init() {
     
     if ('Notification' in window && state.habits.length > 0 && Notification.permission === "default") {
         setTimeout(() => {
-            Notification.requestPermission();
+            requestNotificationSafe();
         }, 5000);
     }
 }
@@ -1786,11 +1940,9 @@ window.addEventListener('click', (e) => {
     }
 });
 
-// Écouteur global pour déverrouiller l'AudioContext en cas de restriction de navigateur
+// Écouteur global pour initialiser et déverrouiller l'AudioContext dès la première interaction
 window.addEventListener('click', () => {
-    if (audioCtx && audioCtx.state === 'suspended') {
-        audioCtx.resume();
-    }
+    initAudioContext();
 }, { once: true });
 
 init();
